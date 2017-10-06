@@ -2221,13 +2221,15 @@ static void NavProcessItem(ImGuiWindow* window, const ImRect& nav_bb, const ImGu
             g.NavMoveResultId = id;
             g.NavMoveResultParentId = window->IDStack.back();
             g.NavMoveResultRectRel = nav_bb_rel;
+            g.NavMoveResultWindow = window;
         }
     }
 
     // Update window-relative bounding box of navigated item
     if (g.NavId == id)
     {
-        window->NavRectRel[window->DC.NavLayerCurrent] = nav_bb_rel;
+        ImGuiWindow* navWindow = window->RootNavWindow;
+        navWindow->NavRectRel[window->DC.NavLayerCurrent] = nav_bb_rel;
         g.NavIdIsAlive = true;
         g.NavIdTabCounter = window->FocusIdxTabCounter;
     }
@@ -2634,31 +2636,33 @@ static void NavUpdate()
     if (g.NavMoveRequest && g.NavMoveResultId != 0)
     {
         IM_ASSERT(g.NavWindow);
-        ImGuiWindow* window = g.NavWindow;
+        ImGuiWindow* window = g.NavMoveResultWindow;
+        ImGuiWindowFlags flags = window->Flags;
 
         // Scroll to keep newly navigated item fully into view
+        ImRect nav_rect_rel(g.NavMoveResultRectRel.Min - (window->Pos - g.NavWindow->Pos), g.NavMoveResultRectRel.Max - (window->Pos - g.NavWindow->Pos));
         ImRect window_rect_rel(window->InnerRect.Min - window->Pos - ImVec2(1,1), window->InnerRect.Max - window->Pos + ImVec2(1,1));
         //g.OverlayDrawList.AddRect(window->Pos + window_rect_rel.Min, window->Pos + window_rect_rel.Max, IM_COL32_WHITE); // [DEBUG]
-        if (g.NavLayer == 0 && !window_rect_rel.Contains(g.NavMoveResultRectRel) && !(window->Flags & ImGuiWindowFlags_NoNavScroll))
+        if (g.NavLayer == 0 && !window_rect_rel.Contains(nav_rect_rel) && !(window->Flags & ImGuiWindowFlags_NoNavScroll))
         {
-            if (window->ScrollbarX && g.NavMoveResultRectRel.Min.x < window_rect_rel.Min.x)
+            if (window->ScrollbarX && nav_rect_rel.Min.x < window_rect_rel.Min.x)
             {
-                window->ScrollTarget.x = g.NavMoveResultRectRel.Min.x + window->Scroll.x - g.Style.ItemSpacing.x;
+                window->ScrollTarget.x = nav_rect_rel.Min.x + window->Scroll.x - g.Style.ItemSpacing.x;
                 window->ScrollTargetCenterRatio.x = 0.0f;
             }
-            else if (window->ScrollbarX && g.NavMoveResultRectRel.Max.x >= window_rect_rel.Max.x)
+            else if (window->ScrollbarX && nav_rect_rel.Max.x >= window_rect_rel.Max.x)
             {
-                window->ScrollTarget.x = g.NavMoveResultRectRel.Max.x + window->Scroll.x + g.Style.ItemSpacing.x;
+                window->ScrollTarget.x = nav_rect_rel.Max.x + window->Scroll.x + g.Style.ItemSpacing.x;
                 window->ScrollTargetCenterRatio.x = 1.0f;
             }
-            if (g.NavMoveResultRectRel.Min.y < window_rect_rel.Min.y)
+            if (nav_rect_rel.Min.y < window_rect_rel.Min.y)
             {
-                window->ScrollTarget.y = g.NavMoveResultRectRel.Min.y + window->Scroll.y - g.Style.ItemSpacing.y;
+                window->ScrollTarget.y = nav_rect_rel.Min.y + window->Scroll.y - g.Style.ItemSpacing.y;
                 window->ScrollTargetCenterRatio.y = 0.0f;
             }
-            else if (g.NavMoveResultRectRel.Max.y >= window_rect_rel.Max.y)
+            else if (nav_rect_rel.Max.y >= window_rect_rel.Max.y)
             {
-                window->ScrollTarget.y = g.NavMoveResultRectRel.Max.y + window->Scroll.y + g.Style.ItemSpacing.y;
+                window->ScrollTarget.y = nav_rect_rel.Max.y + window->Scroll.y + g.Style.ItemSpacing.y;
                 window->ScrollTargetCenterRatio.y = 1.0f;
             }
 
@@ -2668,10 +2672,13 @@ static void NavUpdate()
         }
 
         // Apply result from previous frame navigation directional move request
+        ImGuiWindow *backup = g.NavWindow;
+        g.NavWindow = window;
         ImGui::ClearActiveID();
         SetNavIdAndMoveMouse(g.NavMoveResultId, g.NavLayer, g.NavMoveResultRectRel);
         g.NavJustNavigatedId = g.NavMoveResultId;
         g.NavMoveFromClampedRefRect = false;
+        g.NavWindow = backup;
     }
 
     // When a forwarded move request failed, we restore the highlight that we disabled during the forward frame

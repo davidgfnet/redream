@@ -93,7 +93,9 @@ enum {
     ImGuiWindowFlags_AlwaysVerticalScrollbar = 1 << 14,
     ImGuiWindowFlags_AlwaysHorizontalScrollbar = 1 << 15,
     ImGuiWindowFlags_AlwaysUseWindowPadding = 1 << 16,
-    ImGuiWindowFlags_NavFlattened = 1 << 19,
+    ImGuiWindowFlags_NoNavFocus             = 1 << 17,
+    ImGuiWindowFlags_NoNavInputs            = 1 << 18,
+    ImGuiWindowFlags_NavFlattened           = 1 << 19,
     ImGuiWindowFlags_NoNavScroll            = 1 << 20,
 };
 
@@ -203,6 +205,8 @@ enum {
     ImGuiCol_PlotHistogramHovered,
     ImGuiCol_TextSelectedBg,
     ImGuiCol_ModalWindowDarkening,
+    ImGuiCol_NavHighlight,
+    ImGuiCol_NavWindowingHighlight,
     ImGuiCol_COUNT
 };
 

@@ -496,6 +496,7 @@ struct ImGuiContext
     float                   NavMoveResultDistCenter;            // Best move request candidate center distance to current NavId
     float                   NavMoveResultDistAxial;
     ImRect                  NavMoveResultRectRel;               // Best move request candidate bounding box in window relative space
+    ImGuiWindow*            NavMoveResultWindow;
 
     // Storage for SetNexWindow** and SetNextTreeNode*** functions
     ImVec2                  SetNextWindowPosVal;
