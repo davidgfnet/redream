@@ -2641,7 +2641,7 @@ static void NavUpdate()
         // Scroll to keep newly navigated item fully into view
         ImRect window_rect_rel(window->InnerRect.Min - window->Pos - ImVec2(1,1), window->InnerRect.Max - window->Pos + ImVec2(1,1));
         //g.OverlayDrawList.AddRect(window->Pos + window_rect_rel.Min, window->Pos + window_rect_rel.Max, IM_COL32_WHITE); // [DEBUG]
-        if (g.NavLayer == 0 && !window_rect_rel.Contains(g.NavMoveResultRectRel))
+        if (g.NavLayer == 0 && !window_rect_rel.Contains(g.NavMoveResultRectRel) && !(window->Flags & ImGuiWindowFlags_NoNavScroll))
         {
             if (window->ScrollbarX && g.NavMoveResultRectRel.Min.x < window_rect_rel.Min.x)
             {

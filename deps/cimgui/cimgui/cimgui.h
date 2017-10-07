@@ -94,6 +94,7 @@ enum {
     ImGuiWindowFlags_AlwaysHorizontalScrollbar = 1 << 15,
     ImGuiWindowFlags_AlwaysUseWindowPadding = 1 << 16,
     ImGuiWindowFlags_NavFlattened = 1 << 19,
+    ImGuiWindowFlags_NoNavScroll            = 1 << 20,
 };
 
 enum {

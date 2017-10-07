@@ -537,6 +537,7 @@ enum ImGuiWindowFlags_
     ImGuiWindowFlags_NoNavFocus             = 1 << 17,  // No focusing of this window with gamepad/keyboard navigation
     ImGuiWindowFlags_NoNavInputs            = 1 << 18,  // No gamepad/keyboard navigation within the window
     ImGuiWindowFlags_NavFlattened           = 1 << 19,  // Allow gamepad/keyboard navigation to cross over parent border to this child (only use on child that have no scrolling!)
+    ImGuiWindowFlags_NoNavScroll            = 1 << 20,  // No scrolling of this window with gamepad/keyboard navigation
     // [Internal]
     ImGuiWindowFlags_ChildWindow            = 1 << 22,  // Don't use! For internal use by BeginChild()
     ImGuiWindowFlags_ComboBox               = 1 << 23,  // Don't use! For internal use by ComboBox()
