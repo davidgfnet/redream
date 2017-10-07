@@ -510,6 +510,8 @@ CIMGUI_API void             igPushAllowKeyboardFocus(bool v);
 CIMGUI_API void             igPopAllowKeyboardFocus();
 CIMGUI_API void             igPushButtonRepeat(bool repeat);
 CIMGUI_API void             igPopButtonRepeat();
+CIMGUI_API void             igPushNavDefaultFocus(bool default_focus);
+CIMGUI_API void             igPopNavDefaultFocus();
 
 // Layout
 CIMGUI_API void             igSeparator();

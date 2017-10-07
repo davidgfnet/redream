@@ -406,6 +406,16 @@ CIMGUI_API void igPopButtonRepeat()
     return ImGui::PopButtonRepeat();
 }
 
+CIMGUI_API void igPushNavDefaultFocus(bool default_focus)
+{
+    return ImGui::PushNavDefaultFocus(default_focus);
+}
+
+CIMGUI_API void igPopNavDefaultFocus()
+{
+    return ImGui::PopNavDefaultFocus();
+}
+
 // Tooltip
 CIMGUI_API void igSetTooltip(CONST char* fmt, ...)
 {

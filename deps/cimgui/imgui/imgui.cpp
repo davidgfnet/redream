@@ -5775,6 +5775,16 @@ void ImGui::PopButtonRepeat()
     PopItemFlag();
 }
 
+void ImGui::PushNavDefaultFocus(bool default_focus)
+{
+    PushItemFlag(ImGuiItemFlags_NoNavDefaultFocus, !default_focus);
+}
+
+void ImGui::PopNavDefaultFocus()
+{
+    PopItemFlag();
+}
+
 void ImGui::PushTextWrapPos(float wrap_pos_x)
 {
     ImGuiWindow* window = GetCurrentWindow();
