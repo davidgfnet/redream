@@ -2514,6 +2514,7 @@ static void NavInitWindow(ImGuiWindow* window, bool force_reinit)
         g.NavInitResultId = 0;
         g.NavInitResultExplicit = false;
         g.NavInitResultRectRel = ImRect();
+        g.NavDisableHighlight = false;
         NavUpdateAnyRequestFlag();
     }
     else
