@@ -2780,7 +2780,8 @@ static void NavUpdate()
     g.IO.NavActive = (g.IO.NavUsable && g.NavId != 0 && !g.NavDisableHighlight) || (g.NavWindowingTarget != NULL) || g.NavInitRequest;
 
     // Process NavCancel input (to close a popup, get back to parent, clear focus)
-    if (IsNavInputPressed(ImGuiNavInput_PadCancel, ImGuiNavReadMode_Pressed))
+    bool nav_focus_supported = !g.NavWindow || (g.NavWindow && !(g.NavWindow->Flags & ImGuiWindowFlags_NoNavFocus));
+    if (nav_focus_supported && IsNavInputPressed(ImGuiNavInput_PadCancel, ImGuiNavReadMode_Pressed))
     {
         if (g.ActiveId != 0)
         {
