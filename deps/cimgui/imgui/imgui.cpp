@@ -2080,11 +2080,8 @@ static bool NavScoreItem(ImRect cand)
     }
 
     // Compute distance between boxes
-    // FIXME-NAVIGATION: Introducing biases for vertical navigation, needs to be removed.
     float dbx = NavScoreItemDistInterval(cand.Min.x, cand.Max.x, curr.Min.x, curr.Max.x);
-    float dby = NavScoreItemDistInterval(ImLerp(cand.Min.y, cand.Max.y, 0.2f), ImLerp(cand.Min.y, cand.Max.y, 0.8f), ImLerp(curr.Min.y, curr.Max.y, 0.2f), ImLerp(curr.Min.y, curr.Max.y, 0.8f)); // Scale down on Y to keep using box-distance for vertically touching items
-    if (dby && dbx)
-       dbx = (dbx/1000.0f) + ((dbx > 0.0f) ? +1.0f : -1.0f);
+    float dby = NavScoreItemDistInterval(cand.Min.y, cand.Max.y, curr.Min.y, curr.Max.y); // Scale down on Y to keep using box-distance for vertically touching items
     float dist_box = fabsf(dbx) + fabsf(dby);
 
     // Compute distance between centers (this is off by a factor of 2, but we only compare center distances with each other so it doesn't matter)
@@ -2930,10 +2927,7 @@ static void NavUpdate()
         g.NavMoveFromClampedRefRect = false;
     }
 
-    // For scoring we use a single segment on the left side our current item bounding box (not touching the edge to avoid box overlap with zero-spaced items)
     g.NavScoringRectScreen = g.NavWindow ? ImRect(g.NavWindow->Pos + g.NavWindow->NavRectRel[g.NavLayer].Min, g.NavWindow->Pos + g.NavWindow->NavRectRel[g.NavLayer].Max) : ImRect();
-    g.NavScoringRectScreen.Min.x = ImMin(g.NavScoringRectScreen.Min.x + 1.0f, g.NavScoringRectScreen.Max.x);
-    g.NavScoringRectScreen.Max.x = g.NavScoringRectScreen.Min.x;
     //g.OverlayDrawList.AddRect(g.NavScoringRectScreen.Min, g.NavScoringRectScreen.Max, IM_COL32(255,200,0,255)); // [DEBUG]
     //if (g.NavWindow) for (int layer = 0; layer < 2; layer++) g.OverlayDrawList.AddRect(g.NavWindow->Pos + g.NavWindow->NavRectRel[layer].Min, g.NavWindow->Pos + g.NavWindow->NavRectRel[layer].Max, IM_COL32(255,200,0,255)); // [DEBUG]
 }
